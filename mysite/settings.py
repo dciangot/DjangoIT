@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9c618gj&wi4^r0!)s2-0ad$-vuw8dn3b41+=n32#pb!_=7q$wj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['192.168.1.21','ciango-factory.ddns.net']
 

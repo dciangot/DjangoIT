@@ -19,6 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('home.urls')),
     url(r'^TaskStatus/', include('TaskStatus.urls')),
-    url(r'^Raspberry/', include('Raspberry.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -23,16 +23,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9c618gj&wi4^r0!)s2-0ad$-vuw8dn3b41+=n32#pb!_=7q$wj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.21','ciango-factory.ddns.net']
+ALLOWED_HOSTS = ['192.168.1.21','asotest3.cern.ch','0.0.0.0']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'home.apps.HomeConfig',
-    'Raspberry.apps.RaspberryConfig',
+#    'Raspberry.apps.RaspberryConfig',
     'TaskStatus.apps.TaskstatusConfig',
     'django.contrib.admin',
     'django.contrib.auth',

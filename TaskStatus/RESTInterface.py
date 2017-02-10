@@ -77,9 +77,11 @@ def getFileList(taskname):
         fileDoc['username'] = taskname.split(':')[1].split('_')[0]
         fileDoc['subresource'] = 'getTransferStatus'
 
-        c.setopt(pycurl.URL, 'https://asotest3.cern.ch/crabserver/dev/fileusertransfers' + '?' + urllib.urlencode(fileDoc) )
+        #fileDoc['id'] = taskname
+        #fileDoc['subresource'] = 'getById'
 
-        url = 'https://asotest3.cern.ch/crabserver/dev/fileusertransfers' + '?' + urllib.urlencode(fileDoc)
+        url = 'https://cmsweb.cern.ch/crabserver/prod/fileusertransfers' + '?' + urllib.urlencode(fileDoc)
+        c.setopt(pycurl.URL, url )
 
         #c.setopt(pycurl.POSTFIELDS, urllib.urlencode(fileDoc))
         bbuf = StringIO.StringIO()
@@ -118,4 +120,64 @@ def getFileList(taskname):
         return {}
 
     return data
+
+def getDoc(docId):
+    """
+    get list of file to be tranferred
+    Query:
+    """
+    try:
+        c = pycurl.Curl()
+        c.setopt(pycurl.TIMEOUT, 300)
+        c.setopt(pycurl.CONNECTTIMEOUT, 300)
+        #c.setopt(pycurl.GET, 1)
+
+        fileDoc = {}
+
+        fileDoc['id'] = docId
+        fileDoc['subresource'] = 'getById'
+
+        url = 'https://cmsweb.cern.ch/crabserver/prod/fileusertransfers' + '?' + urllib.urlencode(fileDoc)
+        c.setopt(pycurl.URL, url )
+
+        #c.setopt(pycurl.POSTFIELDS, urllib.urlencode(fileDoc))
+        bbuf = StringIO.StringIO()
+        hbuf = StringIO.StringIO()
+
+        proxy = '/home/dciangot/proxy' 
+
+        c.setopt(pycurl.WRITEFUNCTION, bbuf.write)
+        c.setopt(pycurl.HEADERFUNCTION, hbuf.write)
+        c.setopt(pycurl.CAPATH, '/etc/grid-security/certificates/')
+        c.setopt(pycurl.SSL_VERIFYPEER, True)
+        c.setopt(pycurl.SSLKEY, proxy)
+        c.setopt(pycurl.SSLCERT, proxy)
+        c.setopt(pycurl.VERBOSE, 1)
+
+        c.perform()
+
+        header = parse_header(hbuf.getvalue())
+        if  header.status < 300:
+            data = parse_body(bbuf.getvalue())
+        else:
+            data = bbuf.getvalue()
+            msg = 'url=%s, code=%s, reason=%s, headers=%s' \
+                    % (url, header.status, header.reason, header.header)
+            bbuf.flush()
+            hbuf.flush()
+            return {msg}
+
+        bbuf.flush()
+        hbuf.flush()
+      
+        print data
+
+    except Exception as ex:
+        print ('Error during connection to cmsweb: ' + str(ex))
+        return {}
+
+    return data
+
+
+
 

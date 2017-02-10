@@ -1,3 +1,14 @@
+{% load sort %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'TaskStatus/style.css' %}" />
+<!doctype html>
+<html>
+    <head>
+    </head>
+<starter>
+AsyncStageout Monitor
+</starter>
+<body>
 <form action="/TaskStatus/" method="get">
     <p style="text-align: center;">
     {{ form }} <br>
@@ -5,7 +16,39 @@
     </p>
 </form>
 
-<p style="text-align: center;">
-    {{ file_list }}
-</p>
+
+<div style="overflow-x:auto;">
+
+<table summary="no_orderDate">
+<tr>
+<th><a href="?{% url_replace request 'order_by' 'tm_jobid' '' %}">  JobId  </a></th>
+<th>  File id  </th>
+<th><a href="?{% url_replace request 'order_by' 'tm_transfer_state' '' %}">  Transfer State  </a></th>
+<th><a href="?{% url_replace request 'order_by' 'duration' '' %}">  Transfer duration [min] </a> </th>
+
+</tr>
+
+{% for file in file_list %}
+    <tr>
+    <td> <p style="text-align: center;"> {{ file.tm_jobid }} </p> </td>
+
+    <td><a href="{{ request.path }}{{ file.tm_id  }}"> {{ file.tm_id }} </a> </td>
+    
+    <td> <p style="text-align: center;"> {{ file.tm_transfer_state }} </p> </td>
+    
+    {% if file.tm_transfer_state == 'DONE' %}
+    <td> <p style="text-align: center;"> {{ file.duration }} </p> </td>        
+    {% endif %}
+
+    </tr>
+{% endfor %}
+
+</table>
+
+</div> 
+
+
+</body>
+</html>
+
 
